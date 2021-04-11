@@ -92,6 +92,7 @@ function Login() {
         setUser(res);
         setLoggedInUser(res);
         history.replace(from);
+        
       })
     }
 
@@ -131,6 +132,9 @@ function Login() {
         <br />
         <input type="submit" value={newUser ? "Sign Up" : "Sign in"} />
       </form>
+
+
+      
       <p style={{ color: 'red' }}>{user.error}</p>
       {
         user.success && <p style={{ color: 'green' }}>{newUser ? 'Sign up' : 'Log in'} Successful</p>

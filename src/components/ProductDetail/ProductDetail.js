@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import fakeData from '../../fakeData';
 import Product from '../Product/Product';
 
 const ProductDetail = () => {
     const {productkey} = useParams();
-    const product =  fakeData.find(pd => pd.key === productkey);
+    const [product, setProduct] = useState({});
+    console.log(productkey);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/product/'+ productkey)
+        .then(res => res.json())
+        .then(data => setProduct(data))
+    }, [productkey])
+    console.log(product);
+    
     
     return (
         <div>
-            <h1>Product Detail Comming Soon</h1>
             <Product showAddToCart={false} product={product}></Product>
         </div>
     );
