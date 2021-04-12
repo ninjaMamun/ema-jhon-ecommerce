@@ -11,6 +11,16 @@ export const initializeLoginFramework = () => {
     }
 }
 
+const setUserToken = () => {
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+        // Send token to your backend via HTTPS
+        // ...
+        sessionStorage.setItem('token', idToken);
+    }).catch(function (error) {
+        // Handle error
+    });
+}
+
 export const handleGoogleSingIn = () => {
     var googleProvider = new firebase.auth.GoogleAuthProvider();
     return firebase.auth()
@@ -25,8 +35,10 @@ export const handleGoogleSingIn = () => {
                 success: true
 
             }
-            return signedInUser;
             
+            setUserToken();
+            return signedInUser;
+
         }).catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
@@ -88,7 +100,7 @@ export const createUserWithEmailAndPassword = (name, email, password) => {
             newUserInfo.error = '';
             newUserInfo.success = true;
             updateUserName(name);
-            
+
             return newUserInfo;
         })
         .catch((error) => {
@@ -97,12 +109,12 @@ export const createUserWithEmailAndPassword = (name, email, password) => {
             newUserInfo.error = error.message;
             newUserInfo.success = false;
             return newUserInfo;
-            
+
         });
 }
 
 export const signInWithEmailAndPassword = (email, password) => {
-    return firebase.auth().signInWithEmailAndPassword(email,password)
+    return firebase.auth().signInWithEmailAndPassword(email, password)
         .then((res) => {
             // Signed in
             const newUserInfo = res.user;
@@ -124,13 +136,13 @@ const updateUserName = name => {
 
     user.updateProfile({
 
-      displayName: name,
+        displayName: name,
 
     }).then(function () {
-      // Update successful.
-      console.log('user name update sucessfull');
+        // Update successful.
+        console.log('user name update sucessfull');
     }).catch(function (error) {
-      // An error happened.
-      console.log(error);
+        // An error happened.
+        console.log(error);
     });
-  }
+}
